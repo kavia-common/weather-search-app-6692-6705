@@ -17,13 +17,16 @@ function App() {
     /** Handle city search submit. */
     e.preventDefault();
     setErrorText('');
-    setWeather(null);
 
     try {
       setLoading(true);
+
+      // Keep previous results visible while loading to reduce UI "jitter".
       const data = await getWeatherByCity(city);
       setWeather(data);
     } catch (err) {
+      // On error, clear results so the user doesn't confuse stale data for current data.
+      setWeather(null);
       setErrorText(err?.message || 'Something went wrong. Please try again.');
     } finally {
       setLoading(false);
